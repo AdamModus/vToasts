@@ -59,15 +59,17 @@
     }
 
     function toast(args) {
-        var toast = document.createElement('div');
+        var toastElem = document.createElement('div');
 
         function hide() {
-            toast.className += ' vanillatoasts-fadeOut';
-            toast.addEventListener('animationend', removeToast, false);
+            toastElem.className += ' vtoasts-fadeOut';
+            toastElem.addEventListener('animationend', remove);
         }
 
         function remove() {
-
+            // To avoid memory leaks, especially on older browsers
+            toastElem.removeEventListener('animationend', remove);
+            toastElem.parentElement.removeChild(toastElem);
         }
     }
 
