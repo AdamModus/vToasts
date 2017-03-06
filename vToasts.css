@@ -1,0 +1,89 @@
+#vtoasts-holder {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+}
+
+.vtoasts-toast {
+    padding: 2rem 1.5rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 0 1.5rem #999;
+    color: #fff;
+    opacity: .8;
+    cursor: pointer;
+}
+
+
+/* Animation stuff */
+
+.vtoasts-slideIn {
+    animation-duration: .5s;
+    animation-timing-function: ease-in-out;
+    animation-name: vtoastsSlideIn;
+}
+
+.vtoasts-slideOut {
+    animation-duration: .5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    animation-name: vtoastsSlideIn;
+}
+
+@keyframes vtoastsSlideIn {
+    from {
+        transform: translate3d(400px, 0, 0);
+        ;
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: .8;
+    }
+}
+
+@keyframes vtoastsSlideOut {
+    from {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+    to {
+        transform: translate3d(400px, 0, 0);
+        opacity: 0;
+    }
+}
+
+
+/* Inside the toast */
+
+.vtoast-icon {
+    display: inline-block;
+}
+
+.vtoast-title {
+    display: inline-block;
+}
+
+.vtoast-content {
+    display: block;
+}
+
+
+/* Toast default types */
+
+.vtoast-success {
+    background-color: #51a351;
+}
+
+.vtoast-info {
+    background-color: #2f96b4;
+}
+
+.vtoast-warn {
+    background-color: #f89406;
+}
+
+.vtoast-error {
+    background-color: #bd362f;
+}
