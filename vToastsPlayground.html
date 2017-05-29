@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vToasts Playground</title>
+    <script src="vToasts.js"></script>
+    <script>
+        vToasts.toast({
+            title: vToasts.title.success,
+            type: vToasts.type.success,
+            content: 'My first vToast?! Wow! Such toasty, much sexy, very fast. Doge?!?'
+        });
+
+        setTimeout(function () {
+            vToasts.toast({
+                title: vToasts.title.warn,
+                type: vToasts.type.warn,
+                content: 'My secod vToast?! Wow! This is a warning for test purposes.'
+            });
+        }, 1000)
+    </script>
+    <link href="vToasts.css" rel="stylesheet">
+</head>
+<body>
+
+</body>
+</html>

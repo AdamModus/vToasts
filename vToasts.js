@@ -11,12 +11,40 @@
     var vToasts, incrementalID;
 
     vToasts = {
-        // Temp function, while DOM hasn't loaded yet
         toast: function (options) {
+            // Temp function, while DOM hasn't loaded yet
             if (document.readyState !== 'complete') {
                 console.warn("vToasts hasn't loaded yet!\nYour toast will be toasted once DOMContentLoaded has fired.");
+
+                // Running when DOMContentLoaded has fired
                 window.addEventListener('DOMContentLoaded', function () {
-                    vToasts.toast(options);
+
+                    // Checking if vToasts holder exists in the DOM so we can append our toasts
+                    if (document.getElementById('vtoasts-holder') === null) {
+                        var observer = new MutationObserver(function (mutations) {
+                            mutations.forEach(function (mutation) {
+                                if (mutation.addedNodes.length === 0) {
+                                    return;
+                                }
+
+                                if (document.getElementById('vtoasts-holder') !== null) {
+                                    vToasts.toast(options);
+                                    observer.disconnect();
+                                }
+                                console.log(mutation.addedNodes);
+                            });
+                        });
+
+                        observer.observe(document.body, {
+                            childList: true,
+                            subtree: true,
+                            attributes: false,
+                            characterData: false
+                        });
+
+                    } else {
+                        vToasts.toast(options);
+                    }
                 });
             }
         },
@@ -28,6 +56,8 @@
             warn: 'warn',
             error: 'error'
         },
+        bindTitle: bindTitle,
+        // default titles
         title: {
             success: 'Sucess',
             info: 'Info',
@@ -54,6 +84,7 @@
         document.body.appendChild(holder);
 
         // Binding all the functions
+        vToasts.holder = holder;
         vToasts.toast = toast;
         vToasts.info = info;
         vToasts.success = success;
@@ -66,18 +97,19 @@
     }
 
     function bindTitle(newTitle, keyVal) {
-        vToasts.title[newTitle, keyVal];
+        vToasts.title[keyVal] = newTitle;
     }
 
     function toast(args) {
         // Testing if API is being respected
-        if (typeof args !== 'object' || typeof obj.type === 'undefined' ||
+        if (typeof args !== 'object' || typeof args.type === 'undefined' ||
             (
-                typeof obj.title === 'undefined' &&
-                typeof obj.content === 'undefined' &&
-                typeof obj.icon === 'undefined'
+                typeof args.title === 'undefined' &&
+                typeof args.content === 'undefined' &&
+                typeof args.icon === 'undefined'
             )
         ) {
+            console.warn('You need to have the correct parameters to get a proper toast!');
             return;
         }
 
@@ -122,13 +154,15 @@
         }
 
         // timeout
-        if (typeof options.timeout === 'number') {
-            setTimeout(vToasts.hide, options.timeout);
+        if (typeof args.timeout === 'number') {
+            setTimeout(hide, args.timeout);
+        } else if (args.timeout !== 'infinite') {
+            setTimeout(hide, 3000);
         }
 
         // vToasts API - hide the toast
         function hide() {
-            vtElem.className += ' vtoast-slideOut';
+            vtElem.className += ' vtoasts-slideOut';
             vtElem.addEventListener('animationend', remove);
         }
 
@@ -136,13 +170,15 @@
         function remove() {
             // To avoid memory leaks, especially on older browsers
             vtElem.removeEventListener('animationend', remove);
-            vToasts.toastArr
             vtElem.parentElement.removeChild(vtElem);
+            vToasts.toastArr.splice(vToasts.toastArr.indexOf(toast), 1);
         }
+
+        vtElem.onclick = hide;
 
         // Toast is created, so now we can append it to the page
         vToasts.toastArr.push(toast);
-        holder.appendChild(vtElem);
+        vToasts.holder.appendChild(vtElem);
     }
 
     function info(content) {
@@ -175,5 +211,3 @@
 
     return vToasts;
 });
-
-

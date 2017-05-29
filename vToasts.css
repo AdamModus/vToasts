@@ -1,8 +1,8 @@
 #vtoasts-holder {
     position: fixed;
     top: 0;
-    right: 0;
-    width: 350px;
+    right: 10px;
+    /*width: 20rem;*/
 }
 
 .vtoasts-toast {
@@ -13,8 +13,30 @@
     color: #fff;
     opacity: .8;
     cursor: pointer;
+    will-change: transform;
 }
 
+/* Responsive Design */
+@media (max-width: 240px) {
+    #vtoasts-holder {
+        padding: 8px 8px 8px 50px;
+        width: 11em;
+    }
+}
+
+@media (min-width: 241px) and (max-width: 480px) {
+    #vtoasts-holder {
+        padding: 8px 8px 8px 50px;
+        width: 18em;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    #vtoasts-holder {
+        padding: 15px 15px 15px 50px;
+        width: 25em;
+    }
+}
 
 /* Animation stuff */
 
@@ -27,33 +49,31 @@
 .vtoasts-slideOut {
     animation-duration: .5s;
     animation-timing-function: ease-in-out;
+    animation-name: vtoastsSlideOut;
     animation-fill-mode: forwards;
-    animation-name: vtoastsSlideIn;
 }
 
 @keyframes vtoastsSlideIn {
     from {
-        transform: translate3d(400px, 0, 0);
-        ;
+        transform: translateX(400px);;
         opacity: 0;
     }
     to {
-        transform: translate3d(0, 0, 0);
+        transform: translateX(0);
         opacity: .8;
     }
 }
 
 @keyframes vtoastsSlideOut {
     from {
-        transform: translate3d(0, 0, 0);
+        transform: translateX(0);
         opacity: 1;
     }
     to {
-        transform: translate3d(400px, 0, 0);
+        transform: translateX(400px);
         opacity: 0;
     }
 }
-
 
 /* Inside the toast */
 
@@ -68,7 +88,6 @@
 .vtoast-content {
     display: block;
 }
-
 
 /* Toast default types */
 
