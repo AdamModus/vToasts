@@ -37,7 +37,4 @@ jspm_packages
 .node_repl_history
 
 # IDE files
-.idea/misc.xml
-.idea/modules.xml
-.idea/vToasts.iml
-.idea/workspace.xml
+.idea/
