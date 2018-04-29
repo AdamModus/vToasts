@@ -1,4 +1,4 @@
-(function (root, factory) {
+(function(root, factory) {
     // Implementing the factory pattern
     if (typeof exports === 'object') {
         // commonjs
@@ -7,22 +7,21 @@
         // adding vToasts to the window
         root.vToasts = factory();
     }
-})(this, function () {
+})(this, function() {
     var vToasts, incrementalID;
 
     vToasts = {
-        toast: function (options) {
+        toast: function(options) {
             // Temp function, while DOM hasn't loaded yet
             if (document.readyState !== 'complete') {
                 console.warn("vToasts hasn't loaded yet!\nYour toast will be toasted once DOMContentLoaded has fired.");
 
                 // Running when DOMContentLoaded has fired
-                window.addEventListener('DOMContentLoaded', function () {
-
+                window.addEventListener('DOMContentLoaded', function() {
                     // Checking if vToasts holder exists in the DOM so we can append our toasts
                     if (document.getElementById('vtoasts-holder') === null) {
-                        var observer = new MutationObserver(function (mutations) {
-                            mutations.forEach(function (mutation) {
+                        var observer = new MutationObserver(function(mutations) {
+                            mutations.forEach(function(mutation) {
                                 if (mutation.addedNodes.length === 0) {
                                     return;
                                 }
@@ -41,7 +40,6 @@
                             attributes: false,
                             characterData: false
                         });
-
                     } else {
                         vToasts.toast(options);
                     }
@@ -90,6 +88,7 @@
         vToasts.success = success;
         vToasts.warn = warn;
         vToasts.error = error;
+        vToasts.canSlideAll = true;
     }
 
     function bindType(newType, keyVal) {
@@ -102,12 +101,12 @@
 
     function toast(args) {
         // Testing if API is being respected
-        if (typeof args !== 'object' || typeof args.type === 'undefined' ||
-            (
-                typeof args.title === 'undefined' &&
+        if (
+            typeof args !== 'object' ||
+            typeof args.type === 'undefined' ||
+            (typeof args.title === 'undefined' &&
                 typeof args.content === 'undefined' &&
-                typeof args.icon === 'undefined'
-            )
+                typeof args.icon === 'undefined')
         ) {
             console.warn('You need to have the correct parameters to get a proper toast!');
             return;
@@ -163,21 +162,61 @@
         // vToasts API - hide the toast
         function hide() {
             vtElem.className += ' vtoasts-slideOut';
-            vtElem.addEventListener('animationend', remove);
+            vtElem.addEventListener('animationend', toastAnimationEnd);
         }
 
         // vToasts API - remove the toast after it's fully hidden
-        function remove() {
+        function toastAnimationEnd() {
             // To avoid memory leaks, especially on older browsers
-            vtElem.removeEventListener('animationend', remove);
-            vtElem.parentElement.removeChild(vtElem);
-            vToasts.toastArr.splice(vToasts.toastArr.indexOf(toast), 1);
+            vtElem.removeEventListener('animationend', toastAnimationEnd);
+
+            // Since the particular toast has slid out through the right, it's time to slide all the toasts up
+            // This will help the user understand the toast is gone in a nice, animated way
+            slideAllToasts();
         }
 
-        vtElem.onclick = hide;
+        function slideAllToasts() {
+            // fazer coisas fixes aqui / deal with queue;
+            // if (vToasts.canSlideAll === false) {
+            //     return;
+            // }
+
+            vToasts.canSlideAll = false;
+            var currToast,
+                startingIndex = vToasts.toastArr.indexOf(vtElem),
+                animHeight = vtElem.offsetHeight,
+                animationDuration = 500;
+
+            for (var i = startingIndex; i < vToasts.toastArr.length; i++) {
+                currToast = vToasts.toastArr[i];
+                currToast.style.transition = 'transform ' + animationDuration + 'ms ease-in';
+                currToast.style.transform = 'translateY(-' + animHeight + 'px)';
+            }
+
+            currToast.addEventListener('transitionend', lastToastSlideDone);
+        }
+
+        function lastToastSlideDone(evt) {
+            // To avoid memory leaks but also avoid this element's animation callback being called again unnecessarily
+            evt.target.removeEventListener('transitionend', lastToastSlideDone);
+
+            var currToast,
+                startingIndex = vToasts.toastArr.indexOf(vtElem);
+
+            for (var i = startingIndex; i < vToasts.toastArr.length; i++) {
+                currToast = vToasts.toastArr[i];
+                currToast.style.transition = '';
+                currToast.style.transform = '';
+            }
+
+            vtElem.parentElement.removeChild(vtElem);
+            vToasts.toastArr.splice(startingIndex, 1);
+        }
+
+        // vtElem.onclick = hide;
 
         // Toast is created, so now we can append it to the page
-        vToasts.toastArr.push(toast);
+        vToasts.toastArr.push(vtElem);
         vToasts.holder.appendChild(vtElem);
     }
 

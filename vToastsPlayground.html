@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>vToasts Playground</title>
     <script src="vToasts.js"></script>
     <script>
@@ -17,7 +18,23 @@
                 type: vToasts.type.warn,
                 content: 'My secod vToast?! Wow! This is a warning for test purposes.'
             });
-        }, 1000)
+        }, 1000);
+
+        setTimeout(function () {
+            vToasts.toast({
+                title: vToasts.title.info,
+                type: vToasts.type.info,
+                content: "I'm informing you that this is an info toast"
+            });
+        }, 2000);
+
+        setTimeout(function () {
+            vToasts.toast({
+                title: vToasts.title.error,
+                type: vToasts.type.error,
+                content: 'This is not a real error. Is is simulated to be an error on purpose... You can stop panicking now! -.-'
+            });
+        }, 3000);
     </script>
     <link href="vToasts.css" rel="stylesheet">
 </head>

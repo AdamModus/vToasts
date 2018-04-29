@@ -2,52 +2,58 @@
     position: fixed;
     top: 0;
     right: 10px;
-    /*width: 20rem;*/
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .vtoasts-toast {
-    padding: 2rem 1.5rem;
+    padding: 1rem 1rem;
     margin-top: 1rem;
     border-radius: 5px;
     box-shadow: 0 0 1.5rem #999;
     color: #fff;
-    opacity: .8;
-    cursor: pointer;
+    opacity: 0.8;
+    /* cursor: pointer; */
     will-change: transform;
 }
 
 /* Responsive Design */
-@media (max-width: 240px) {
+@media (max-width: 320px) {
     #vtoasts-holder {
         padding: 8px 8px 8px 50px;
-        width: 11em;
+        width: 10em;
     }
 }
 
-@media (min-width: 241px) and (max-width: 480px) {
+@media (min-width: 320px) and (max-width: 480px) {
     #vtoasts-holder {
         padding: 8px 8px 8px 50px;
-        width: 18em;
+        width: 13em;
     }
 }
 
-@media (min-width: 481px) and (max-width: 768px) {
+@media (min-width: 480px) and (max-width: 768px) {
+    #vtoasts-holder {
+        padding: 8px 8px 8px 50px;
+        width: 16em;
+    }
+}
+
+@media (min-width: 768px) {
     #vtoasts-holder {
         padding: 15px 15px 15px 50px;
-        width: 25em;
+        width: 20em;
     }
 }
 
 /* Animation stuff */
-
 .vtoasts-slideIn {
-    animation-duration: .5s;
+    animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-name: vtoastsSlideIn;
 }
 
 .vtoasts-slideOut {
-    animation-duration: .5s;
+    animation-duration: 0.5s;
     animation-timing-function: ease-in-out;
     animation-name: vtoastsSlideOut;
     animation-fill-mode: forwards;
@@ -55,12 +61,12 @@
 
 @keyframes vtoastsSlideIn {
     from {
-        transform: translateX(400px);;
+        transform: translateX(400px);
         opacity: 0;
     }
     to {
         transform: translateX(0);
-        opacity: .8;
+        opacity: 0.8;
     }
 }
 
@@ -76,12 +82,12 @@
 }
 
 /* Inside the toast */
-
 .vtoast-icon {
     display: inline-block;
 }
 
 .vtoast-title {
+    font-size: 1.5rem;
     display: inline-block;
 }
 
@@ -90,7 +96,6 @@
 }
 
 /* Toast default types */
-
 .vtoast-success {
     background-color: #51a351;
 }
